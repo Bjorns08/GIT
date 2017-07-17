@@ -1,8 +1,7 @@
-<?php
-Function parsing_main($url)
-{
-    $Liste_url = array($url);     
-        
+
+<?php   
+    $url = filter_input(INPUT_POST, 'url');
+    $Liste_url = array($url);         
     if (strpos($url,'drone-fpv-racer') > 0)
     {
         $Prix = parsing_DFR($Liste_url);
@@ -19,22 +18,21 @@ Function parsing_main($url)
     {   
       $Prix = parsing_Breizh_Racer($Liste_url);
     }
-
     echo $Prix[0]."<br />".$Prix[1];
-}
-
-
+    
+    
 Function parsing_DFR($Liste_url)
 {
-    echo 'Drone FPV Racer'."<br />";
+    //echo 'Drone FPV Racer'."<br />";
     $queryXPath1 = '//span[@class="list_price"]'; //DFR
-    $queryXPath2 = '//span[@class="availability"]'; //DFR
+    $queryXPath2 = '//span[@id="availability_value"]'; //DFR
     $Prix = array();
     $Prix = Prix_Dispo ($Liste_url, $queryXPath1, $queryXPath2);
     //Rempalcer le . par , 
     $Prix[0] = str_replace('.', ',', $Prix[0]);
     //OutOf
-    if (strpos ($Prix[1], "OutOf")> 0)
+	//echo $Prix[1];
+    if (strpos ($Prix[1], "indisponible")> 0)
     {
         $Prix[1] = '0';
     }
@@ -43,12 +41,12 @@ Function parsing_DFR($Liste_url)
          $Prix[1] = '1';
     }
     
-    // echo $Prix[0]."<br />".$Prix[1];
+    // echo $Prix[0]."<br />".$Prix[1]; 
     Return $Prix;
 }
 Function parsing_FPV4($Liste_url)
 {
-    echo 'FPV4DRONE'."<br />";
+    //echo 'FPV4DRONE'."<br />";
     $queryXPath1 = '//span[@id="our_price_display"]';//FPV4 & MADE4
     $queryXPath2 = '//p[@id="availability_statut"]';//FPV4 & MADE4
     $Prix = array();

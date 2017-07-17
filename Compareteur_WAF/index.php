@@ -10,9 +10,12 @@ and open the template in the editor.
         <title></title>
     </head>
     <body>
-         <?php
-         include('Function.php');
-        // put your code here
-        ?>
+        <form action="function.php" method="post">
+        <p>
+            <input type="text" name="url" />
+            <input type="submit" value="Valider" />
+        </p>
+        </form>
+
         </body>
 </html>
