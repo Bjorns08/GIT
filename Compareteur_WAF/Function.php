@@ -1,7 +1,12 @@
 
 <?php   
     $url = filter_input(INPUT_POST, 'url');
-    $Liste_url = array($url);         
+    parsing_main ($url);
+    
+ Function parsing_main($url)
+{
+    $Liste_url = array($url);     
+        
     if (strpos($url,'drone-fpv-racer') > 0)
     {
         $Prix = parsing_DFR($Liste_url);
@@ -18,9 +23,13 @@
     {   
       $Prix = parsing_Breizh_Racer($Liste_url);
     }
-    echo $Prix[0]."<br />".$Prix[1];
+
+    //echo $Prix[0]."<br />".$Prix[1];
+	return $Prix;
+}
+
     
-    
+
 Function parsing_DFR($Liste_url)
 {
     //echo 'Drone FPV Racer'."<br />";
