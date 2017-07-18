@@ -23,9 +23,25 @@
     {   
       $Prix = parsing_Breizh_Racer($Liste_url);
     }
+    elseif (strpos($url,'all-drones-racers') > 0)
+    {   
+      $Prix = parsing_AllDroneRacer($Liste_url);
+    }
+    elseif (strpos($url,'studiosport') > 0)//Ya des bus il dit qu'il y a du stock si dispo en magasin only :/ 
+    {   
+      $Prix = parsing_StudioSport($Liste_url);
+    }
+    elseif (strpos($url,'dronelec') > 0)//Ya des bus il dit qu'il y a du stock si dispo en magasin only :/ 
+    {   
+      $Prix = parsing_Dronelec($Liste_url);
+    }
+    elseif (strpos($url,'breizh-modelisme') > 0)
+    {   
+      $Prix = parsing_Breizh_Modelisme($Liste_url);
+    }  
 
-    //echo $Prix[0]."<br />".$Prix[1];
-	return $Prix;
+    echo $Prix[0]."<br />".$Prix[1];
+	//return $Prix;
 }
 
     
@@ -74,7 +90,6 @@ Function parsing_FPV4($Liste_url)
      // echo $Prix[0]."<br />".$Prix[1];
     Return $Prix;
 }
-
 Function parsing_MD4R($Liste_url)
 {
     echo 'MADE4RACE'."<br />";
@@ -118,6 +133,89 @@ Function parsing_Breizh_Racer($Liste_url)
     // echo $Prix[0]."<br />".$Prix[1];
     Return $Prix;
 }
+Function parsing_AllDroneRacer($Liste_url)
+{
+    //echo 'FPV4DRONE'."<br />";
+    $queryXPath1 = '//span[@id="our_price_display"]';//FPV4 & MADE4
+    $queryXPath2 = '//p[@id="availability_statut"]';//FPV4 & MADE4
+    $Prix = array();
+    $Prix = Prix_Dispo ($Liste_url, $queryXPath1, $queryXPath2);
+    // Suppression du ? en fin de chaine 
+    $Prix[0] = str_replace('€', '', $Prix[0]);
+    //si 0 pas en stock si 1 en stock 
+    if (strpos ($Prix[1], "plus en stock")> 0)
+    {
+        $Prix[1] = '0';
+    }
+    else
+    {
+         $Prix[1] = '1';
+    }
+     // echo $Prix[0]."<br />".$Prix[1];
+    Return $Prix;
+}
+Function parsing_StudioSport($Liste_url)
+{
+    $queryXPath1 = '//span[@class="price"]';//FPV4 & MADE4
+    $queryXPath2 = '//span[@class="availability"]';//FPV4 & MADE4
+    $Prix = array();
+    $Prix = Prix_Dispo ($Liste_url, $queryXPath1, $queryXPath2);
+    // Suppression du ? en fin de chaine 
+    $Prix[0] = str_replace('€', '', $Prix[0]);
+    //si 0 pas en stock si 1 en stock 
+    if (strpos ($Prix[1], "plus en stock")> 0)
+    {
+        $Prix[1] = '0';
+    }
+    else
+    {
+         $Prix[1] = '1';
+    }
+     // echo $Prix[0]."<br />".$Prix[1];
+    Return $Prix;
+}
+Function parsing_Dronelec($Liste_url)
+{
+    $queryXPath1 = '//span[@itemprop="price"]';//FPV4 & MADE4
+    $queryXPath2 = '//span[starts-with(@class, "stock ")]';//breiz
+    $Prix = array();
+    $Prix = Prix_Dispo ($Liste_url, $queryXPath1, $queryXPath2);
+    // Suppression du ? en fin de chaine 
+    //$Prix[0] = str_replace('€', '', $Prix[0]);
+    //si 0 pas en stock si 1 en stock 
+    if (strpos ($Prix[1], "approvisionnement")> 0)
+    {
+        $Prix[1] = '0';
+    }
+    else
+    {
+         $Prix[1] = '1';
+    }
+     // echo $Prix[0]."<br />".$Prix[1];
+    Return $Prix;
+}
+Function parsing_Breizh_Modelisme($Liste_url)
+{
+    //echo 'Breizh modelisme'."<br />";
+    $queryXPath1 = '//span[@class="PBSalesPrice"]';//breiz
+    $queryXPath2 = '//span[starts-with(@class, "PBShortTxt PBM")]';//breiz
+    $Prix = array();
+    $Prix = Prix_Dispo ($Liste_url, $queryXPath1, $queryXPath2);
+   // Suppression du ? en fin de chaine 
+    $Prix[0] = str_replace('€', '', $Prix[0]);
+    //Rupture
+    if (strpos ($Prix[1], "Rupture")> 0)
+    {
+        $Prix[1] = '0';
+    }
+    else
+    {
+         $Prix[1] = '1';
+    }
+    // echo $Prix[0]."<br />".$Prix[1];
+    Return $Prix;
+}
+
 // Function de récupération 
 Function Prix_Dispo ($Liste_url, $queryXPath1, $queryXPath2)
 {
@@ -148,6 +246,3 @@ Function Prix_Dispo ($Liste_url, $queryXPath1, $queryXPath2)
     }		
     return $PRIX;
 }
-
-
-?>
